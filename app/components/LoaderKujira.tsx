@@ -7,8 +7,11 @@ export default function LoaderKujira() {
     const [isLoading, setIsLoading] = useState(true);
     const [progress, setProgress] = useState(0);
     const [depth, setDepth] = useState(0);
+    const [windowHeight, setWindowHeight] = useState(0);
 
     useEffect(() => {
+        setWindowHeight(window.innerHeight);
+        
         // Simulate loading progress
         const duration = 3000; // 3 seconds
         const interval = 30; // Update every 30ms
@@ -139,29 +142,31 @@ export default function LoaderKujira() {
                     </motion.div>
 
                     {/* Bubbles effect */}
-                    <div className="absolute inset-0 overflow-hidden">
-                        {[...Array(8)].map((_, i) => (
-                            <motion.div
-                                key={i}
-                                className="absolute h-2 w-2 rounded-full bg-white/20"
-                                style={{
-                                    left: `${15 + i * 10}%`,
-                                    bottom: -10
-                                }}
-                                animate={{
-                                    y: [-10, -window.innerHeight - 20],
-                                    opacity: [0, 0.6, 0],
-                                    scale: [0.5, 1, 0.5]
-                                }}
-                                transition={{
-                                    duration: 2 + i * 0.3,
-                                    repeat: Infinity,
-                                    delay: i * 0.2,
-                                    ease: "easeOut"
-                                }}
-                            />
-                        ))}
-                    </div>
+                    {windowHeight > 0 && (
+                        <div className="absolute inset-0 overflow-hidden">
+                            {[...Array(8)].map((_, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="absolute h-2 w-2 rounded-full bg-white/20"
+                                    style={{
+                                        left: `${15 + i * 10}%`,
+                                        bottom: -10
+                                    }}
+                                    animate={{
+                                        y: [-10, -windowHeight - 20],
+                                        opacity: [0, 0.6, 0],
+                                        scale: [0.5, 1, 0.5]
+                                    }}
+                                    transition={{
+                                        duration: 2 + i * 0.3,
+                                        repeat: Infinity,
+                                        delay: i * 0.2,
+                                        ease: "easeOut"
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </motion.div>
                 </>
             )}

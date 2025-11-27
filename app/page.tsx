@@ -19,8 +19,10 @@ export default function Home() {
 
   // Calculate depth based on scroll progress (200m to 3000m)
   const [currentDepth, setCurrentDepth] = useState(200);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     let rafId: number;
     let lastUpdate = 0;
     const throttleDelay = 100; // Update depth every 100ms max
@@ -186,33 +188,35 @@ export default function Home() {
       </motion.div>
 
       {/* Bubbles effect - reduced count for performance */}
-      <div className="fixed inset-0 z-5 overflow-hidden pointer-events-none">
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute rounded-full bg-white/10"
-            style={{
-              width: Math.random() * 6 + 2 + 'px',
-              height: Math.random() * 6 + 2 + 'px',
-              left: `${Math.random() * 100}%`,
-              bottom: -20,
-              willChange: 'transform, opacity'
-            }}
-            animate={{
-              y: [-20, -window.innerHeight - 100],
-              x: [0, (Math.random() - 0.5) * 100],
-              opacity: [0, 0.3, 0.6, 0.3, 0],
-              scale: [0.5, 1, 1.2, 0.8, 0.5]
-            }}
-            transition={{
-              duration: 8 + Math.random() * 6,
-              repeat: Infinity,
-              delay: Math.random() * 8,
-              ease: "linear"
-            }}
-          />
-        ))}
-      </div>
+      {isMounted && (
+        <div className="fixed inset-0 z-5 overflow-hidden pointer-events-none">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute rounded-full bg-white/10"
+              style={{
+                width: Math.random() * 6 + 2 + 'px',
+                height: Math.random() * 6 + 2 + 'px',
+                left: `${Math.random() * 100}%`,
+                bottom: -20,
+                willChange: 'transform, opacity'
+              }}
+              animate={{
+                y: [-20, -window.innerHeight - 100],
+                x: [0, (Math.random() - 0.5) * 100],
+                opacity: [0, 0.3, 0.6, 0.3, 0],
+                scale: [0.5, 1, 1.2, 0.8, 0.5]
+              }}
+              transition={{
+                duration: 8 + Math.random() * 6,
+                repeat: Infinity,
+                delay: Math.random() * 8,
+                ease: "linear"
+              }}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Section 1: Hero */}
       <Section1 />

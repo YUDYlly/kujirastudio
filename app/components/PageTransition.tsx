@@ -8,9 +8,19 @@ export default function PageTransition({ children }: { children: React.ReactNode
   const pathname = usePathname();
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [windowHeight, setWindowHeight] = useState(0);
+  const [bubbles, setBubbles] = useState<{id: number, size: number, x: number, delay: number, duration: number}[]>([]);
 
   useEffect(() => {
     setWindowHeight(window.innerHeight);
+    
+    // Generate random bubble positions and sizes only on client side
+    setBubbles(Array.from({ length: 12 }, (_, i) => ({
+      id: i,
+      size: Math.random() * 300 + 150, // 150-450px
+      x: Math.random() * 100, // 0-100%
+      delay: Math.random() * 0.3, // 0-0.3s delay
+      duration: 1 + Math.random() * 0.5 // 1-1.5s duration
+    })));
   }, []);
 
   useEffect(() => {
@@ -18,15 +28,6 @@ export default function PageTransition({ children }: { children: React.ReactNode
     const timer = setTimeout(() => setIsTransitioning(false), 1500);
     return () => clearTimeout(timer);
   }, [pathname]);
-
-  // Generate random bubble positions and sizes
-  const bubbles = Array.from({ length: 12 }, (_, i) => ({
-    id: i,
-    size: Math.random() * 300 + 150, // 150-450px
-    x: Math.random() * 100, // 0-100%
-    delay: Math.random() * 0.3, // 0-0.3s delay
-    duration: 1 + Math.random() * 0.5 // 1-1.5s duration
-  }));
 
   return (
     <>
