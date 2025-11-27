@@ -20,9 +20,11 @@ export default function Home() {
   // Calculate depth based on scroll progress (200m to 3000m)
   const [currentDepth, setCurrentDepth] = useState(200);
   const [isMounted, setIsMounted] = useState(false);
+  const [windowHeight, setWindowHeight] = useState(0);
 
   useEffect(() => {
     setIsMounted(true);
+    setWindowHeight(window.innerHeight);
     let rafId: number;
     let lastUpdate = 0;
     const throttleDelay = 100; // Update depth every 100ms max
@@ -188,7 +190,7 @@ export default function Home() {
       </motion.div>
 
       {/* Bubbles effect - reduced count for performance */}
-      {isMounted && (
+      {isMounted && windowHeight > 0 && (
         <div className="fixed inset-0 z-5 overflow-hidden pointer-events-none">
           {[...Array(8)].map((_, i) => (
             <motion.div
@@ -202,7 +204,7 @@ export default function Home() {
                 willChange: 'transform, opacity'
               }}
               animate={{
-                y: [-20, -window.innerHeight - 100],
+                y: [-20, -windowHeight - 100],
                 x: [0, (Math.random() - 0.5) * 100],
                 opacity: [0, 0.3, 0.6, 0.3, 0],
                 scale: [0.5, 1, 1.2, 0.8, 0.5]
